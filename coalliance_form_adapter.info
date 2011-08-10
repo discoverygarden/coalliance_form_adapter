@@ -1,0 +1,8 @@
+; $Id$
+name = Coalliance Form Adapter
+description = Expose xml forms for Coalliance.
+dependencies[] = xml_forms
+dependencies[] = islandora_content_model_forms
+package = XML Forms
+version = 6.x-$Format:%h$-dev
+core = 6.x
