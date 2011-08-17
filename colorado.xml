@@ -493,7 +493,7 @@
                             <value>&lt;genre authority="marcgt"&gt;%value%&lt;/genre&gt;</value>
                         </create>
                         <read>
-                            <path>/mods:mods/mods:genre[@type='marcgt']</path>
+                            <path>/mods:mods/mods:genre[@authority='marcgt']</path>
                             <context>document</context>
                         </read>
                         <update>
