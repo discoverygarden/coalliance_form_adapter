@@ -170,10 +170,7 @@
                                     <path>/mods:mods</path>
                                     <context>document</context>
                                     <type>xml</type>
-                                    <value>&lt;name
-                                        type='corporate'&gt;&lt;namePart&gt;%value%&lt;/namePart&gt;&lt;role&gt;&lt;roleTerm
-                                        authority="marcrelator"
-                                        type="text"&gt;creator&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
+                                    <value>&lt;name type='corporate'&gt;&lt;namePart&gt;%value%&lt;/namePart&gt;&lt;role&gt;&lt;roleTerm authority="marcrelator" type="text"&gt;creator&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
                                 </create>
                                 <read>
                                     <path>/mods:mods/mods:name[@type='corporate']/mods:role[mods:roleTerm='creator']/../mods:namePart[not(@type)]</path>
@@ -183,10 +180,10 @@
                                     <path>self::node()</path>
                                     <context>self</context>
                                 </update>
-                                <update>
+                                <delete>
                                     <path>self::node()/..</path>
                                     <context>self</context>
-                                </update>
+                                </delete>
                             </actions>
                         </properties>
                     </element>
@@ -438,7 +435,7 @@
                             </actions>
                         </properties>
                     </element>
-                    <element>
+                    <element name="frequency">
                         <properties>
                             <type>tags</type>
                             <access>true</access>
