@@ -65,7 +65,7 @@
                             <context>document</context>
                         </read>
                         <update>
-                            <path>self::node</path>
+                            <path>self::node()</path>
                             <context>self</context>
                         </update>
                     </actions>
