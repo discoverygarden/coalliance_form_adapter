@@ -58,8 +58,14 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
     return FALSE;
   }
   module_load_include('inc', 'islandora_content_model_forms', 'IngestObjectMetadataForm');
-  $ingest_form = new IngestObjectMetadataForm();
-  return $ingest_form->create($collection_pid, NULL, $form_state);
+  try {
+    $ingest_form = new IngestObjectMetadataForm();
+    return $ingest_form->create($collection_pid, NULL, $form_state);
+  } catch (Exception $e) {
+    $msg = "File: {$e->getFile()}<br/>Line: {$e->getLine()}<br/>Error: {$e->getMessage()}";
+    drupal_set_message($msg, 'error');
+    return array();
+  }
 }
 
 /**
