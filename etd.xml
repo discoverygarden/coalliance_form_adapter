@@ -750,6 +750,11 @@
                 <properties>
                     <type>select</type>
                     <title>Degree Name</title>
+                    <options>
+                        <option key="bachelor">bachelor</option>
+                        <option key="master">master</option>
+                        <option key="doctoral">doctoral</option>
+                    </options>
                     <actions>
                         <create>
                             <path>/mods:mods</path>
