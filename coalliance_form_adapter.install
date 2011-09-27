@@ -19,3 +19,13 @@ function coalliance_form_adapter_enable() {
     XMLFormDatabase::Create('etd', $doc);
   }
 }
+
+function coalliance_form_adapter_disable() {
+  module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
+  if (XMLFormDatabase::Exists('colorado')) {
+    XMLFormDatabase::Delete('colorado');
+  }
+  if (XMLFormDatabase::Exists('etd')) {
+    XMLFormDatabase::Delete('etd');
+  }
+}
