@@ -7,17 +7,15 @@
  * 
  */
 function coalliance_form_adapter_enable() {
-  module_load_include('inc', 'xml_form_builder', 'FormBuilder');
-  if (!FormBuilder::HasFormDefinition('colorado')) {
+  module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
+  if (!XMLFormDatabase::Exists('colorado')) {
     $doc = new DOMDocument();
     $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/colorado.xml');
-    FormBuilder::CreateForm('colorado');
-    FormBuilder::SetFormDefinition('colorado', $doc);
+    XMLFormDatabase::Create('colorado', $doc);
   }
-  if (!FormBuilder::HasFormDefinition('etd')) {
+  if (!XMLFormDatabase::Exists('etd')) {
     $doc = new DOMDocument();
     $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/etd.xml');
-    FormBuilder::CreateForm('etd');
-    FormBuilder::SetFormDefinition('etd', $doc);
+    XMLFormDatabase::Create('etd', $doc);
   }
 }
