@@ -18,6 +18,11 @@ function coalliance_form_adapter_enable() {
     $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/etd.xml');
     XMLFormDatabase::Create('etd', $doc);
   }
+  if (!XMLFormDatabase::Exists('collection')) {
+    $doc = new DOMDocument();
+    $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/collection.xml');
+    XMLFormDatabase::Create('etd', $doc);
+  }
 }
 
 function coalliance_form_adapter_disable() {
@@ -27,5 +32,8 @@ function coalliance_form_adapter_disable() {
   }
   if (XMLFormDatabase::Exists('etd')) {
     XMLFormDatabase::Delete('etd');
+  }
+  if (XMLFormDatabase::Exists('collecton')) {
+    XMLFormDatabase::Delete('collection');
   }
 }
