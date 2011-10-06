@@ -8,32 +8,23 @@
  */
 function coalliance_form_adapter_enable() {
   module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
-  if (!XMLFormDatabase::Exists('colorado')) {
-    $doc = new DOMDocument();
-    $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/colorado.xml');
-    XMLFormDatabase::Create('colorado', $doc);
-  }
-  if (!XMLFormDatabase::Exists('etd')) {
-    $doc = new DOMDocument();
-    $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/etd.xml');
-    XMLFormDatabase::Create('etd', $doc);
-  }
-  if (!XMLFormDatabase::Exists('collection')) {
-    $doc = new DOMDocument();
-    $doc->load(drupal_get_path('module', 'coalliance_form_adapter') . '/collection.xml');
-    XMLFormDatabase::Create('etd', $doc);
+  $module_path = drupal_get_path('module', 'coalliance_form_adapter');
+  $forms = array('colorado', 'etd', 'collection');
+  foreach ($forms as $form) {
+    if (!XMLFormDatabase::Exists($form)) {
+      $doc = new DOMDocument();
+      $doc->load($module_path . '/' . $form . '.xml');
+      XMLFormDatabase::Create($form, $doc);
+    }
   }
 }
 
 function coalliance_form_adapter_disable() {
   module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
-  if (XMLFormDatabase::Exists('colorado')) {
-    XMLFormDatabase::Delete('colorado');
-  }
-  if (XMLFormDatabase::Exists('etd')) {
-    XMLFormDatabase::Delete('etd');
-  }
-  if (XMLFormDatabase::Exists('collecton')) {
-    XMLFormDatabase::Delete('collection');
+  $forms = array('colorado', 'etd', 'collection');
+  foreach ($forms as $form) {
+    if (XMLFormDatabase::Exists($form)) {
+      XMLFormDatabase::Delete($form);
+    }
   }
 }
