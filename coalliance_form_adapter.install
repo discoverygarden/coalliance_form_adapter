@@ -9,7 +9,7 @@
 function coalliance_form_adapter_enable() {
   module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
   $module_path = drupal_get_path('module', 'coalliance_form_adapter');
-  $forms = array('colorado', 'etd', 'collection');
+  $forms = array('colorado', 'etd', 'collection', 'publications');
   foreach ($forms as $form) {
     if (!XMLFormDatabase::Exists($form)) {
       $doc = new DOMDocument();
@@ -21,7 +21,7 @@ function coalliance_form_adapter_enable() {
 
 function coalliance_form_adapter_disable() {
   module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
-  $forms = array('colorado', 'etd', 'collection');
+  $forms = array('colorado', 'etd', 'collection', 'publications');
   foreach ($forms as $form) {
     if (XMLFormDatabase::Exists($form)) {
       XMLFormDatabase::Delete($form);

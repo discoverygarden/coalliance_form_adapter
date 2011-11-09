@@ -29,7 +29,7 @@
                         <create>
                             <path>/mods:mods</path>
                             <context>document</context>
-                            <schema/>
+                            <schema></schema>
                             <type>xml</type>
                             <value>&lt;titleInfo&gt;&lt;title&gt;%value%&lt;/title&gt;&lt;/titleInfo&gt;</value>
                         </create>
@@ -43,7 +43,7 @@
                         </update>
                     </actions>
                 </properties>
-                <children/>
+                <children></children>
             </element>
             <element name="contributors">
                 <properties>
@@ -96,10 +96,11 @@
                                     <value>&lt;name
                                         type='personal'&gt;&lt;namePart&gt;%value%&lt;/namePart&gt;&lt;role&gt;&lt;roleTerm
                                         authority="marcrelator"
-                                        type="text"&gt;advisor&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
+                                        type="text"&gt;thesis advisor&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
                                 </create>
                                 <read>
-                                    <path>/mods:mods/mods:name[@type='personal']/mods:role[mods:roleTerm='advisor']/../mods:namePart[not(@type)]</path>
+                                    <path>/mods:mods/mods:name[@type='personal']/mods:role[mods:roleTerm='thesis
+                                        advisor']/../mods:namePart[not(@type)]</path>
                                     <context>document</context>
                                 </read>
                                 <update>
@@ -131,10 +132,13 @@
                                             <path>/mods:mods</path>
                                             <context>document</context>
                                             <type>xml</type>
-                                            <value>&lt;name type=&apos;personal&apos;&gt;&lt;namePart&gt;%value%&lt;/namePart&gt;&lt;role&gt;&lt;roleTerm type=&quot;text&quot;&gt;committee&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
+                                            <value>&lt;name
+                                                type=&apos;personal&apos;&gt;&lt;namePart&gt;%value%&lt;/namePart&gt;&lt;role&gt;&lt;roleTerm
+                                                type=&quot;text&quot;&gt;committee member&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
                                         </create>
                                         <read>
-                                            <path>/mods:mods/mods:name[@type='personal']/mods:role[mods:roleTerm='committee']/../mods:namePart[not(@type)]</path>
+                                            <path>/mods:mods/mods:name[@type='personal']/mods:role[mods:roleTerm='committee
+                                                member']/../mods:namePart[not(@type)]</path>
                                             <context>document</context>
                                         </read>
                                         <update>
@@ -202,10 +206,11 @@
                                     <type>xml</type>
                                     <value>&lt;name type=&apos;corporate&apos;&gt;
                                         &lt;namePart&gt;%value%&lt;/namePart&gt;
-                                        &lt;role&gt;&lt;roleTerm type=&quot;text&quot;&gt;grantor&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
+                                        &lt;role&gt;&lt;roleTerm authority=&quot;marcrelator&quot; type=&quot;text&quot;&gt;degree grantor&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
                                 </create>
                                 <read>
-                                    <path>/mods:mods/mods:name[@type='corporate']/mods:role[mods:roleTerm='grantor']/../mods:namePart[not(@type)]</path>
+                                    <path>/mods:mods/mods:name[@type='corporate']/mods:role[mods:roleTerm='degree
+                                        grantor']/../mods:namePart[not(@type)]</path>
                                     <context>document</context>
                                 </read>
                                 <update>
@@ -300,7 +305,7 @@
                                 </update>
                             </actions>
                         </properties>
-                        <children/>
+                        <children></children>
                     </element>
                     <element name="publisher">
                         <properties>
@@ -325,7 +330,7 @@
                                 </update>
                             </actions>
                         </properties>
-                        <children/>
+                        <children></children>
                     </element>
                     <element name="issued">
                         <properties>
@@ -399,7 +404,7 @@
                                 </update>
                             </actions>
                         </properties>
-                        <children/>
+                        <children></children>
                     </element>
                 </children>
             </element>
@@ -427,7 +432,7 @@
                         </update>
                     </actions>
                 </properties>
-                <children/>
+                <children></children>
             </element>
             <element name="language">
                 <properties>
@@ -504,7 +509,7 @@
                                 </update>
                             </actions>
                         </properties>
-                        <children/>
+                        <children></children>
                     </element>
                     <element name="origin">
                         <properties>
@@ -536,7 +541,7 @@
                                 </update>
                             </actions>
                         </properties>
-                        <children/>
+                        <children></children>
                     </element>
                 </children>
             </element>
@@ -563,7 +568,7 @@
                         </update>
                     </actions>
                 </properties>
-                <children/>
+                <children></children>
             </element>
             <element name="notes">
                 <properties>
@@ -609,7 +614,7 @@
                                         </update>
                                     </actions>
                                 </properties>
-                                <children/>
+                                <children></children>
                             </element>
                         </children>
                     </element>
@@ -663,7 +668,7 @@
                                         </update>
                                     </actions>
                                 </properties>
-                                <children/>
+                                <children></children>
                             </element>
                         </children>
                     </element>
@@ -717,7 +722,7 @@
                                         </update>
                                     </actions>
                                 </properties>
-                                <children/>
+                                <children></children>
                             </element>
                         </children>
                     </element>
@@ -778,6 +783,7 @@
                     <type>tags</type>
                     <access>true</access>
                     <title>Topics</title>
+                    <required>true</required>
                     <tree>true</tree>
                 </properties>
                 <children>
@@ -1101,7 +1107,7 @@
                     <tree>true</tree>
                     <value>Submit</value>
                 </properties>
-                <children/>
+                <children></children>
             </element>
         </children>
     </form>
