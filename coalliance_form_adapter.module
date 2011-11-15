@@ -12,19 +12,19 @@
  * @return array 
  */
 function coalliance_form_adapter_menu() {
-  $items['formbuilder/ingest/%'] = array(
+  $items['formbuilder/ingest'] = array(
     'title' => 'Ingest',
     'description' => 'Ingest',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('coalliance_form_adapter_ingest_form', 2),
+    'page arguments' => array('coalliance_form_adapter_ingest_form'),
     'access arguments' => array('ingest new fedora objects'),
     'type' => MENU_CALLBACK,
   );
-  $items['formbuilder/edit/%'] = array(
+  $items['formbuilder/edit'] = array(
     'title' => 'Edit Metadata',
     'description' => 'Edit Metadata',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('coalliance_form_adapter_edit_form', 2),
+    'page arguments' => array('coalliance_form_adapter_edit_form'),
     'access arguments' => array('edit fedora meta data'),
     'type' => MENU_CALLBACK,
   );
@@ -39,7 +39,7 @@ function coalliance_form_adapter_menu() {
  * 
  * @return array
  */
-function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid) {
+function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid = NULL) {
   if (!user_access('ingest new fedora objects')) {
     drupal_set_message(t('You do not have permission to ingest.'), 'error');
     return FALSE;
@@ -54,8 +54,7 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
     return FALSE;
   }
   if ($collection_pid == NULL) {
-    drupal_set_message(t('You must specify an collection object pid to ingest an object.'), 'error');
-    return FALSE;
+    $collection_pid = variable_get('fedora_repository_pid', 'islandora:top');
   }
   module_load_include('inc', 'islandora_content_model_forms', 'IngestObjectMetadataForm');
   try {
@@ -108,9 +107,12 @@ function coalliance_form_adapter_ingest_form_submit(array &$form, array &$form_s
  * 
  * @return array
  */
-function coalliance_form_adapter_edit_form(array &$form_state, $pid) {
+function coalliance_form_adapter_edit_form(array &$form_state, $pid=NULL) {
   module_load_include('inc', 'islandora_content_model_forms', 'EditObjectMetadataForm');
   module_load_include('inc', 'fedora_repository', 'ConnectionHelper');
+  if(!$pid){
+    $pid = variable_get('fedora_repository_pid', 'islandora:top');
+  }
   $connection_helper = new ConnectionHelper();
   $client = $connection_helper->getSoapClient(variable_get('fedora_soap_url', 'http://localhost:8080/fedora/services/access?wsdl'));
   try {
