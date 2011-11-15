@@ -113,9 +113,6 @@ function coalliance_form_adapter_edit_form(array &$form_state, $pid=NULL) {
   if(!$pid){
     $pid = variable_get('fedora_repository_pid', 'islandora:top');
   }
-  elseif ($pid == 'undefined') {
-    $pid = variable_get('fedora_repository_pid', 'islandora:top');
-  }
   $connection_helper = new ConnectionHelper();
   $client = $connection_helper->getSoapClient(variable_get('fedora_soap_url', 'http://localhost:8080/fedora/services/access?wsdl'));
   try {
