@@ -110,7 +110,7 @@ function coalliance_form_adapter_ingest_form_submit(array &$form, array &$form_s
 function coalliance_form_adapter_edit_form(array &$form_state, $pid=NULL) {
   module_load_include('inc', 'islandora_content_model_forms', 'EditObjectMetadataForm');
   module_load_include('inc', 'fedora_repository', 'ConnectionHelper');
-  if(!$pid){
+  if (!$pid) {
     $pid = variable_get('fedora_repository_pid', 'islandora:top');
   }
   $connection_helper = new ConnectionHelper();
@@ -159,4 +159,34 @@ function coalliance_form_adapter_edit_form_submit(array &$form, array &$form_sta
     drupal_set_message($msg, 'error');
     $form_state['rebuild'] = TRUE;
   }
+}
+
+/**
+ * 
+ */
+function coalliance_form_adapter_restore_forms_to_default() {
+  module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
+  $module_path = drupal_get_path('module', 'coalliance_form_adapter');
+  $forms = array('colorado', 'etd', 'collection', 'publications');
+  foreach ($forms as $form) {
+    if (!XMLFormDatabase::Exists($form)) {
+      $doc = new DOMDocument();
+      $doc->load($module_path . '/' . $form . '.xml');
+      XMLFormDatabase::Create($form, $doc);
+    }
+    else {
+      $doc = new DOMDocument();
+      $doc->load($module_path . '/' . $form . '.xml');
+      XMLFormDatabase::Update($form, $doc);
+    }
+  }
+}
+
+function coalliance_form_adapter_form_xml_form_builder_main_alter(array &$form, array &$form_state) {
+  $form[0]['default'] = array(
+    '#type' => 'submit',
+    '#value' => t('Restore Defaults'),
+    '#name' => 'default',
+    '#submit' => array('coalliance_form_adapter_restore_forms_to_default')
+  );
 }
