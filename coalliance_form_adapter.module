@@ -59,7 +59,35 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
   module_load_include('inc', 'islandora_content_model_forms', 'IngestObjectMetadataForm');
   try {
     $ingest_form = new IngestObjectMetadataForm();
-    return $ingest_form->create($collection_pid, NULL, $form_state);
+    $form = $ingest_form->create($collection_pid, NULL, $form_state);
+    /**
+     * Hactastic stuff for the work flow module.
+     */
+    if (module_exists('islandora_workflow') && $form_state['storage']['step'] > 1) {
+      module_load_include('inc', 'islandora_workflow', 'islandora_workflow');
+      global $user;
+      $index = array_search('submit', array_keys($form));
+      $index = $index === FALSE ? count($form) : $index; // Not found... Append to the end.
+      // Workflow
+      $collections = islandora_workflow_get_current_users_collections('islandora_workflow_Manager');
+      $show = (isset($collections[$collection_pid]) || user_access('islandora_workflow_Administrator') || $user->uid == 1) ? TRUE : FALSE;
+      $collections = islandora_workflow_get_current_users_collections('all');
+      $default = $show ?
+          1 :
+          (isset($collections[$collection_pid])) ? 1 : 0;
+      $default = (user_access('islandora_workflow_Administrator') || $user->uid == 1) ? TRUE : FALSE;
+      // End workflow
+      $workflow['workflow'] = array(
+        '#type' => ($show) ? 'checkbox' : 'hidden',
+        '#title' => 'Create Workflow',
+        '#description' => t('Create\'s a work flow datastream for this object.'),
+        '#return_value' => 1,
+        '#default_value' => $default,
+      );
+      $end = array_splice($form, $index);
+      return array_merge($form, $workflow, $end);
+    }
+    return $form;
   } catch (Exception $e) {
     $msg = "File: {$e->getFile()}<br/>Line: {$e->getLine()}<br/>Error: {$e->getMessage()}";
     drupal_set_message($msg, 'error');
@@ -94,8 +122,18 @@ function coalliance_form_adapter_ingest_form_validate(array &$form, array &$form
 function coalliance_form_adapter_ingest_form_submit(array &$form, array &$form_state) {
   module_load_include('inc', 'islandora_content_model_forms', 'IngestObjectMetadataForm');
   if ($form_state['storage']['step'] == 2) {
-    $ingest_form = new IngestObjectMetadataForm();
-    $ingest_form->submit($form, $form_state);
+    try {
+      $ingest_form = new IngestObjectMetadataForm();
+      $ingest_form->submit($form, $form_state);
+      if (module_exists('islandora_workflow') && $form_state['values']['workflow'] == 1) {
+        module_load_include('inc', 'islandora_workflow', 'islandora_workflow');
+        islandora_workflow_init_workflow($form_state['values']['pid']); // PID gets set in the submit function above.
+      }
+    } catch (Exception $e) {
+      $msg = "File: {$e->getFile()}<br/>Line: {$e->getLine()}<br/>Error: {$e->getMessage()}";
+      drupal_set_message($msg, 'error');
+      $form_state['rebuild'] = TRUE;
+    }
   }
 }
 
