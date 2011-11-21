@@ -80,7 +80,7 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
       $workflow['workflow'] = array(
         '#type' => ($show) ? 'checkbox' : 'hidden',
         '#title' => 'Create Workflow',
-        '#description' => t('Create\'s a work flow datastream for this object.'),
+        '#description' => t('Send this object to workflow.'),
         '#return_value' => 1,
         '#default_value' => $default,
       );
