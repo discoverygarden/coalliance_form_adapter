@@ -111,6 +111,10 @@ function coalliance_form_adapter_ingest_form_validate(array &$form, array &$form
     $xml_form = new XMLForm($form_state);
     $xml_form->validate($form, $form_state);
   }
+  $errors = form_get_errors();
+  if (!empty($errors) && !empty($_FILES)) {
+    drupal_set_message(t('Remember to reattach your files.'));
+  }
 }
 
 /**
