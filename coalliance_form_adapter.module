@@ -63,6 +63,10 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
     /**
      * Hactastic stuff for the work flow module.
      */
+    $form['cancel'] = array(
+      '#type' => 'markup',
+      '#value' => '<input type="button" value="' . t('Cancel') . '" onclick="window.location = \'' . url('fedora/repository/' . $collection_pid) . '\';">',
+    );
     if (module_exists('islandora_workflow') && $form_state['storage']['step'] > 1) {
       module_load_include('inc', 'islandora_workflow', 'islandora_workflow');
       global $user;
@@ -104,7 +108,7 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
 function coalliance_form_adapter_ingest_form_validate(array &$form, array &$form_state) {
   if ($form_state['storage']['step'] == 1) {
     $form_state['storage']['step']++;
-    $form_state['rebuild'] = TRUE;
+    $form_state['rebuild'] = TRUE; // Rebuild for the cancel button.
   }
   else {
     module_load_include('inc', 'xml_form_api', 'XMLForm');
@@ -159,7 +163,12 @@ function coalliance_form_adapter_edit_form(array &$form_state, $pid=NULL) {
   $client = $connection_helper->getSoapClient(variable_get('fedora_soap_url', 'http://localhost:8080/fedora/services/access?wsdl'));
   try {
     $edit_form = new EditObjectMetadataForm();
-    return $edit_form->create($pid, $client, $form_state);
+    $form = $edit_form->create($pid, $client, $form_state);
+    $form['cancel'] = array(
+      '#type' => 'markup',
+      '#value' => '<input type="button" value="' . t('Cancel') . '" onclick="window.location = \'' . url('fedora/repository/' . $pid) . '\';">',
+    );
+    return $form;
   } catch (Exception $e) {
     $msg = "File: {$e->getFile()}<br/>Line: {$e->getLine()}<br/>Error: {$e->getMessage()}";
     drupal_set_message($msg, 'error');
