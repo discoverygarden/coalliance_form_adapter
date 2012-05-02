@@ -224,26 +224,24 @@ function coalliance_form_adapter_edit_form_submit(array &$form, array &$form_sta
 /**
  * 
  */
-function coalliance_form_adapter_restore_forms_to_default() {
+function coalliance_form_adapter_restore_forms_to_default($form, &$form_state) {
+  $form_name = $form[0]['default']['#post']['form_name'];
   module_load_include('inc', 'xml_form_builder', 'XMLFormDatabase');
   $module_path = drupal_get_path('module', 'coalliance_form_adapter');
-  $forms = array('colorado', 'etd', 'collection', 'publications');
-  foreach ($forms as $form) {
-    if (!XMLFormDatabase::Exists($form)) {
-      $doc = new DOMDocument();
-      $doc->load($module_path . '/' . $form . '.xml');
-      XMLFormDatabase::Create($form, $doc);
+  if(file_exists($module_path . '/' . $form_name . '.xml')) {
+    $doc = new DOMDocument();
+    $doc->load($module_path . '/' . $form_name . '.xml');
+    if (!XMLFormDatabase::Exists($form_name)) {
+        XMLFormDatabase::Create($form_name, $doc);
     }
     else {
-      $doc = new DOMDocument();
-      $doc->load($module_path . '/' . $form . '.xml');
-      XMLFormDatabase::Update($form, $doc);
+        XMLFormDatabase::Update($form_name, $doc);
     }
   }
 }
 
 function coalliance_form_adapter_form_xml_form_builder_main_alter(array &$form, array &$form_state) {
-  $form[0]['default'] = array(
+    $form[0]['default'] = array(
     '#type' => 'submit',
     '#value' => t('Restore Defaults'),
     '#name' => 'default',
