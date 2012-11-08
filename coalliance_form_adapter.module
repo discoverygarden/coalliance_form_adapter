@@ -67,30 +67,6 @@ function coalliance_form_adapter_ingest_form(array &$form_state, $collection_pid
       '#type' => 'markup',
       '#value' => '<input type="button" value="' . t('Cancel') . '" onclick="window.location = \'' . url('fedora/repository/' . $collection_pid) . '\';">',
     );
-    if (module_exists('islandora_workflow') && $form_state['storage']['step'] > 1) {
-      module_load_include('inc', 'islandora_workflow', 'islandora_workflow');
-      global $user;
-      $index = array_search('submit', array_keys($form));
-      $index = $index === FALSE ? count($form) : $index; // Not found... Append to the end.
-      // Workflow
-      $collections = islandora_workflow_get_current_users_collections('islandora_workflow_Manager');
-      $show = (isset($collections[$collection_pid]) || user_access('islandora_workflow_Administrator') || $user->uid == 1) ? TRUE : FALSE;
-      $collections = islandora_workflow_get_current_users_collections('all');
-      $default = $show ?
-          1 :
-          (isset($collections[$collection_pid])) ? 1 : 0;
-      $default = (user_access('islandora_workflow_Administrator') || $user->uid == 1) ? TRUE : FALSE;
-      // End workflow
-      $workflow['workflow'] = array(
-        '#type' => ($show) ? 'checkbox' : 'hidden',
-        '#title' => 'Create Workflow',
-        '#description' => t('Send this object to workflow.'),
-        '#return_value' => 1,
-        '#default_value' => $default,
-      );
-      $end = array_splice($form, $index);
-      return array_merge($form, $workflow, $end);
-    }
     return $form;
   } catch (Exception $e) {
     $msg = "File: {$e->getFile()}<br/>Line: {$e->getLine()}<br/>Error: {$e->getMessage()}";
@@ -142,10 +118,19 @@ function coalliance_form_adapter_ingest_form_submit(array &$form, array &$form_s
     try {
       $ingest_form = new IngestObjectMetadataForm();
       $ingest_form->submit($form, $form_state);
-      if (module_exists('islandora_workflow') && $form_state['values']['workflow'] == 1) {
-        module_load_include('inc', 'islandora_workflow', 'islandora_workflow');
-        islandora_workflow_init_workflow($form_state['values']['pid']); // PID gets set in the submit function above.
-      }
+      if (module_exists('islandora_workflow')) {
+        module_load_include('collection.inc', 'islandora_workflow');
+        module_load_include('permissions.inc', 'islandora_workflow');
+        module_load_include('inc', 'islandora_workflow');
+
+        $pid = $form_state['values']['pid'];
+        $parent_pid = islandora_workflow_get_object_parent($pid);
+        if (islandora_workflow_is_collection_workflow_tracked($parent_pid)) {
+          if (islandora_workflow_user_collection_permission_check($parent_pid)) {
+            islandora_workflow_init_workflow($pid); 
+          }
+        }
+      }  
     } catch (Exception $e) {
       $msg = "File: {$e->getFile()}<br/>Line: {$e->getLine()}<br/>Error: {$e->getMessage()}";
       drupal_set_message($msg, 'error');
